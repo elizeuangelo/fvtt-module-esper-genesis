@@ -9,7 +9,7 @@
     --t5e-primary-accent: var(--color4) !important;
 }
 
-div.app.window-app section.window-content, li.chat-message, #chat-form textarea#chat-message {
+div.app.window-app section.window-content, li.chat-message, #chat-form textarea#chat-message, div.tidy5e.sheet.actor #item-info-container {
     background-color: whitesmoke;
     background-blend-mode: luminosity;
 }
@@ -25,4 +25,12 @@ div.tidy5e.sheet.actor .header-attributes .ac-display .config-button {
 
 div.tidy5e.sheet.actor .list-layout .items-list .items-footer a {
     flex: 0 0 130px;
+}
+
+div.tidy5e.sheet.actor section.center-pane {
+    overflow: initial;
+}
+
+div.tidy5e.sheet.actor section.center-pane ul.resources li.resource:first-child {
+    box-shadow: 0 0 20px green;
 }
