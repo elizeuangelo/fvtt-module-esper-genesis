@@ -145,6 +145,7 @@ function temporaryWorkaround(actor) {
 	setTimeout(() => {
 		const changes = Object.fromEntries(Object.entries(CONFIG.DND5E.skills).map(([key, value]) => [`system.skills.${key}.ability`, value.ability]));
 		changes['system.resources.primary.label'] = 'Talent Points';
+		changes['system.resources.primary.lr'] = true;
 		actor.update(changes);
 	}, 0);
 }

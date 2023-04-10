@@ -1,12 +1,13 @@
 :root {
-    --color1: hsl(46deg 38% 26%);
-    --color2: hsl(0deg 0% 63%);
-    --color3: hsl(110deg 100% 50%);
-    --color4: hsl(38deg 100% 50%);
+    --color1: hsl(35deg 68% 26%);
+    --color2: hsl(44deg 100% 49%);
+    --color3: hsl(49deg 100% 50%);
+    --color4: hsl(38deg 100% 41%);
     --t5e-tertiary-color: var(--color1) !important;
-    --t5e-light-color: var(--color2) !important;
+    --t5e-light-color: hsl(0deg 0% 58%) !important;
     --t5e-header-border: var(--color2) !important;
     --t5e-primary-accent: var(--color4) !important;
+    --t5e-background: lightgray !important;
 }
 
 div.app.window-app section.window-content, li.chat-message, #chat-form textarea#chat-message, div.tidy5e.sheet.actor #item-info-container {
@@ -27,10 +28,19 @@ div.tidy5e.sheet.actor .list-layout .items-list .items-footer a {
     flex: 0 0 130px;
 }
 
+div.tidy5e.sheet.actor .tidy5e-navigation .item.active {
+    border: 1px solid var(--t5e-header-border);
+    border-bottom-color: transparent;
+}
+
 div.tidy5e.sheet.actor section.center-pane {
     overflow: initial;
 }
 
 div.tidy5e.sheet.actor section.center-pane ul.resources li.resource:first-child {
     box-shadow: 0 0 20px green;
+}
+
+.app option, optgroup {
+    background: var(--t5e-background);
 }
