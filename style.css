@@ -1,0 +1,24 @@
+:root {
+    --color1: hsl(46deg 38% 26%);
+    --color2: hsl(0deg 0% 63%);
+    --color3: hsl(110deg 100% 50%);
+    --color4: hsl(38deg 100% 50%);
+    --t5e-tertiary-color: var(--color1) !important;
+    --t5e-light-color: var(--color2) !important;
+    --t5e-header-border: var(--color2) !important;
+    --t5e-primary-accent: var(--color4) !important;
+}
+
+div.app.window-app section.window-content, li.chat-message, #chat-form textarea#chat-message {
+    background-color: whitesmoke;
+    background-blend-mode: luminosity;
+}
+
+.dnd5e.sheet .sheet-navigation .item.active {
+    border-bottom: 3px solid var(--color3) !important;
+}
+
+div.tidy5e.sheet.actor .header-attributes .ac-display .config-button {
+    color: var(--color3);
+    text-shadow: 0 0 5px black;
+}
