@@ -36,5 +36,8 @@
 				}
 			}
 		]
-	}
+	},
+	"url": "https://github.com/elizeuangelo/fvtt-module-esper-genesis",
+	"manifest": "https://github.com/elizeuangelo/fvtt-module-esper-genesis/releases/download/latest/module.json",
+	"download": "https://github.com/elizeuangelo/fvtt-module-esper-genesis/releases/download/v1.0.0/esper-genesis.zip"
 }
