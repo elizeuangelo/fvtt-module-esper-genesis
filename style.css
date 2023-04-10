@@ -22,3 +22,7 @@ div.tidy5e.sheet.actor .header-attributes .ac-display .config-button {
     color: var(--color3);
     text-shadow: 0 0 5px black;
 }
+
+div.tidy5e.sheet.actor .list-layout .items-list .items-footer a {
+    flex: 0 0 130px;
+}

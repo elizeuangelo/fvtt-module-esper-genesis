@@ -144,9 +144,7 @@ CONFIG.DND5E.spellComponents = {};
 function temporaryWorkaround(actor) {
 	setTimeout(() => {
 		const changes = Object.fromEntries(Object.entries(CONFIG.DND5E.skills).map(([key, value]) => [`system.skills.${key}.ability`, value.ability]));
-		changes.push({
-			'system.resources.primary.label': 'Talent Points',
-		});
+		changes['system.resources.primary.label'] = 'Talent Points';
 		actor.update(changes);
 	}, 0);
 }
