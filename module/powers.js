@@ -12,9 +12,6 @@ const AbilityUseDialog = game.system.applications.item.AbilityUseDialog;
 function getEsperLevel(actor) {
 	if (!actor.system.spells) return;
 
-	// Spellcasting DC
-	const spellcastingAbility = actor.system.abilities[actor.system.attributes.spellcasting];
-
 	// Translate the list of classes into spellcasting progression
 	const progression = { slot: 0 };
 	const types = {};
@@ -43,13 +40,14 @@ function getMaximumSpellLevel(esperLevel) {
 	return ~~((esperLevel + 1) / 2);
 }
 
-function createRank(rank, resourceLabel) {
+function createRank(rank, resourceLabel, talent) {
 	const cost = RANK_POWER_CONSUMPTION[rank];
+	const hasSlots = talent >= RANK_POWER_CONSUMPTION[rank];
 	return {
 		level: rank,
-		label: `${CONFIG.DND5E.spellLevels[rank]} (${cost} ${resourceLabel})`,
+		label: `${CONFIG.DND5E.spellLevels[rank]} (${hasSlots ? cost : 0} ${resourceLabel})`,
 		canCast: true,
-		hasSlots: true,
+		hasSlots,
 	};
 }
 
@@ -77,17 +75,21 @@ async function powerUseDialog(item) {
 		createTemplate: game.user.can('TEMPLATE_CREATE') && item.hasAreaTarget,
 		errors: [],
 		spellLevels: [],
+		isSpell: true,
 	};
 
 	const talent = item.parent.system.resources.primary;
-	const talentPointsMaxLevel = Object.values(RANK_POWER_CONSUMPTION).filter((v) => talent.value >= v).length - 1;
 
 	const levelMin = item.system.level,
-		levelMax = Math.min(talentPointsMaxLevel, getMaximumSpellLevel(getEsperLevel(item.parent))),
+		levelMax = getMaximumSpellLevel(getEsperLevel(item.parent)),
 		resourceLabel = talent.label;
 
 	for (let rank = levelMin; rank <= levelMax; rank++) {
-		data.spellLevels.push(createRank(rank, resourceLabel));
+		data.spellLevels.push(createRank(rank, resourceLabel, talent.value));
+	}
+
+	if (data.spellLevels.filter((data) => data.hasSlots).length === 0) {
+		data.errors.push(`You have not enough ${talent.label} to cast the power`);
 	}
 
 	// Render the ability usage template
@@ -97,7 +99,7 @@ async function powerUseDialog(item) {
 	html = html.replace('Consume Power Slot?', `Consume ${resourceLabel}?`);
 
 	// Create the Dialog and return data as a Promise
-	const icon = data.isSpell ? 'fa-magic' : 'fa-fist-raised';
+	const icon = data.isSpell ? 'fa-hand' : 'fa-fist-raised';
 	const label = game.i18n.localize(`DND5E.AbilityUse${data.isSpell ? 'Cast' : 'Use'}`);
 	return new Promise((resolve) => {
 		const dlg = new AbilityUseDialog(item, {
@@ -109,10 +111,15 @@ async function powerUseDialog(item) {
 					label: label,
 					callback: (html) => {
 						const fd = new FormDataExtended(html[0].querySelector('form'));
-						item.use({
-							consumeTalentPoints: fd.object.consumeSpellSlot ? RANK_POWER_CONSUMPTION[fd.object.consumeSpellLevel] : 0,
-							needsConfiguration: false,
-						});
+						const canCast = talent.value >= RANK_POWER_CONSUMPTION[fd.object.consumeSpellLevel];
+						if (fd.object.consumeSpellSlot === false || canCast) {
+							item.use({
+								consumeTalentPoints: fd.object.consumeSpellSlot ? RANK_POWER_CONSUMPTION[fd.object.consumeSpellLevel] : 0,
+								needsConfiguration: false,
+							});
+						} else {
+							ui.notifications.warn(`You have not enough ${talent.label} to cast ${item.name}`);
+						}
 						resolve(fd.object);
 					},
 				},
@@ -128,14 +135,14 @@ function preUseItem(item, config, options) {
 	if (item.type !== 'spell' || item.system.level < 1 || item.system.preparation.mode !== 'innate') return;
 	if (config.consumeTalentPoints !== undefined) return;
 
-	const minimumCost = RANK_POWER_CONSUMPTION[item.system.level];
-	const resource = item.parent.system.resources.primary;
-	const talentPoints = resource.value ?? 0;
-
-	if (talentPoints < minimumCost) {
-		ui.notifications.warn(`You don't have enough ${resource.label}`);
-		return false;
-	}
+	//const minimumCost = RANK_POWER_CONSUMPTION[item.system.level];
+	//const resource = item.parent.system.resources.primary;
+	//const talentPoints = resource.value ?? 0;
+	//
+	//if (talentPoints < minimumCost) {
+	//	ui.notifications.warn(`You don't have enough ${resource.label}`);
+	//	return false;
+	//}
 
 	powerUseDialog(item);
 	return false;

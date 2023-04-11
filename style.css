@@ -10,7 +10,8 @@
     --t5e-background: lightgray !important;
 }
 
-div.app.window-app section.window-content, li.chat-message, #chat-form textarea#chat-message, div.tidy5e.sheet.actor #item-info-container {
+div.app.window-app section.window-content, li.chat-message, #chat-form textarea#chat-message, div.tidy5e.sheet.actor #item-info-container,
+div.tidy5e.sheet.actor.npc .spellcasting-ability {
     background-color: whitesmoke;
     background-blend-mode: luminosity;
 }
