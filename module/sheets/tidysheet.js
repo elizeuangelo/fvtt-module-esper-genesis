@@ -28,3 +28,4 @@ function modifySheet(sheet, html, options) {
 }
 
 Hooks.on('renderTidy5eSheet', modifySheet);
+Hooks.on('renderTidy5eNPC', modifySheet);

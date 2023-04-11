@@ -4,10 +4,14 @@ const CHANGES = {
 		labels.next().remove();
 		labels.remove();
 	},
+	'a.action-button.currency-convert.rollable i': (el) => {
+		const grandParent = el[0].parentElement.parentElement;
+		el.appendTo(grandParent);
+	},
 };
 
 function modifySheet(sheet, html, options) {
-	if (!(sheet instanceof game.system.applications.actor.ActorSheet5eCharacter)) return;
+	if (!['ActorSheet5eCharacter'].includes(sheet.constructor.name)) return;
 	Object.entries(CHANGES).forEach(([key, fn]) => {
 		const el = html.find(key);
 		if (el) fn(el, sheet);
