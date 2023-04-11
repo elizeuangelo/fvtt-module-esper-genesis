@@ -17,6 +17,7 @@ const CHANGES = {
 	'li.currency-item input': (el) => {
 		$([...el.parent()].filter((e) => !Object.keys(CONFIG.DND5E.currencies).includes(e.classList[1]))).remove();
 	},
+	'li.currency-item.convert': (el) => el.remove(),
 };
 
 function modifySheet(sheet, html, options) {
