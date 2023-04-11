@@ -3,5 +3,6 @@ Hooks.once('init', () => {
 });
 Hooks.once('setup', () => {
 	import('./module/lang.js');
-	import('./module/tidysheet.js');
+	import('./module/sheets/tidysheet.js');
+	import('./module/sheets/originalsheet.js');
 });

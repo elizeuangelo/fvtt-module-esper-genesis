@@ -45,3 +45,7 @@ div.tidy5e.sheet.actor section.center-pane ul.resources li.resource:first-child 
 .app option, optgroup {
     background: var(--t5e-background);
 }
+
+.dnd5e.sheet.actor .inventory-filters .currency label.denomination {
+    flex-basis: 120px;
+}

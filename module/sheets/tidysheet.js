@@ -1,4 +1,4 @@
-import { RANK_POWER_CONSUMPTION } from './powers.js';
+import { RANK_POWER_CONSUMPTION } from '../powers.js';
 
 const CHANGES = {
 	'li[data-filter=ritual]': (el) => el.css('display', 'none'),
@@ -13,6 +13,9 @@ const CHANGES = {
 		const ids = [...el.parent()].map((el) => el.getAttribute('data-item-id'));
 		const items = ids.map((id) => sheet.actor.items.get(id));
 		[...el].forEach((el, idx) => (el.innerHTML = `<b>${RANK_POWER_CONSUMPTION[items[idx].system.level] || 'Free'}</b>`));
+	},
+	'li.currency-item input': (el) => {
+		$([...el.parent()].filter((e) => !Object.keys(CONFIG.DND5E.currencies).includes(e.classList[1]))).remove();
 	},
 };
 

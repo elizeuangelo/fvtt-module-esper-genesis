@@ -1,3 +1,11 @@
+CONFIG.DND5E.currencies = {
+	digital: { label: 'Cubil (digital)', abbreviation: 'digital', conversion: 1, digital: true },
+	coin: { label: 'Cubil (coin)', abbreviation: 'coin', conversion: 1, digital: false },
+};
+CONFIG.DND5E.encumbrance.currencyPerWeight = {
+	imperial: 500,
+	metric: 1100,
+};
 CONFIG.DND5E.itemActionTypes = {
 	mwak: 'Melee Weapon Attack',
 	rwak: 'Ranged Weapon Attack',
@@ -106,14 +114,13 @@ CONFIG.DND5E.spellPreparationModes = {
 	prepared: 'Technique',
 	always: 'Always Prepared Technique',
 	innate: 'Talent',
-	atwill: 'At-Will Talent',
+	atwill: 'Innate Talent',
 };
 CONFIG.DND5E.spellProgression = {
 	none: 'None',
 	full: 'Full',
 	half: 'Half',
 	third: 'Third',
-	pact: 'Pact',
 };
 CONFIG.DND5E.spellScalingModes = {
 	cantrip: 'Prime',
@@ -141,12 +148,66 @@ CONFIG.DND5E.spellSchools = {
 CONFIG.DND5E.spellTags = {};
 CONFIG.DND5E.spellComponents = {};
 
+// Changes the encumbrance calculation to disgard Digital Coins
+game.system.documents.Actor5e.prototype._prepareEncumbrance = function () {
+	const encumbrance = (this.system.attributes.encumbrance ??= {});
+
+	// Get the total weight from items
+	const physicalItems = ['weapon', 'equipment', 'consumable', 'tool', 'backpack', 'loot'];
+	let weight = this.items.reduce((weight, i) => {
+		if (!physicalItems.includes(i.type)) return weight;
+		const q = i.system.quantity || 0;
+		const w = i.system.weight || 0;
+		return weight + q * w;
+	}, 0);
+
+	// [Optional] add Currency Weight (for non-transformed actors)
+	const currency = this.system.currency;
+	if (game.settings.get('dnd5e', 'currencyWeight') && currency) {
+		const numCoins = Object.entries(currency)
+			.filter(([key, value]) => !CONFIG.DND5E.currencies[key]?.digital)
+			.map(([key, value]) => value)
+			.reduce((val, denom) => val + Math.max(denom, 0), 0);
+		const currencyPerWeight = game.settings.get('dnd5e', 'metricWeightUnits')
+			? CONFIG.DND5E.encumbrance.currencyPerWeight.metric
+			: CONFIG.DND5E.encumbrance.currencyPerWeight.imperial;
+		weight += numCoins / currencyPerWeight;
+	}
+
+	// Determine the Encumbrance size class
+	let mod = { tiny: 0.5, sm: 1, med: 1, lg: 2, huge: 4, grg: 8 }[this.system.traits.size] || 1;
+	if (this.flags.dnd5e?.powerfulBuild) mod = Math.min(mod * 2, 8);
+
+	const strengthMultiplier = game.settings.get('dnd5e', 'metricWeightUnits')
+		? CONFIG.DND5E.encumbrance.strMultiplier.metric
+		: CONFIG.DND5E.encumbrance.strMultiplier.imperial;
+
+	// Populate final Encumbrance values
+	encumbrance.value = weight.toNearest(0.1);
+	encumbrance.max = ((this.system.abilities.str?.value ?? 10) * strengthMultiplier * mod).toNearest(0.1);
+	encumbrance.pct = Math.clamped((encumbrance.value * 100) / encumbrance.max, 0, 100);
+	encumbrance.encumbered = encumbrance.pct > 200 / 3;
+};
+
 function temporaryWorkaround(actor) {
 	setTimeout(() => {
 		const changes = Object.fromEntries(Object.entries(CONFIG.DND5E.skills).map(([key, value]) => [`system.skills.${key}.ability`, value.ability]));
 		changes['system.resources.primary.label'] = 'Talent Points';
 		changes['system.resources.primary.lr'] = true;
-		actor.update(changes);
+
+		// Erase old currencies -> doesnt last
+		//changes['system.currency.-=pp'] = null;
+		//changes['system.currency.-=gp'] = null;
+		//changes['system.currency.-=ep'] = null;
+		//changes['system.currency.-=sp'] = null;
+		//changes['system.currency.-=cp'] = null;
+
+		// Create new currencies
+		Object.entries(flattenObject({ 'system.currency': Object.fromEntries(Object.keys(CONFIG.DND5E.currencies).map((key) => [key, 0])) })).forEach(
+			([key, value]) => (changes[key] = value)
+		);
+
+		actor.update(changes, { performDeletions: true });
 	}, 0);
 }
 
