@@ -5,6 +5,7 @@ const CHANGES = {
 		labels.remove();
 	},
 	'a.action-button.currency-convert.rollable i': (el) => {
+		if (Object.keys(CONFIG.DND5E.currencies).length > 1) return;
 		const grandParent = el[0].parentElement.parentElement;
 		el.appendTo(grandParent);
 	},
