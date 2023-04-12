@@ -118,7 +118,7 @@ async function powerUseDialog(item) {
 								needsConfiguration: false,
 							});
 						} else {
-							ui.notifications.warn(`You have not enough ${talent.label} to cast ${item.name}`);
+							ui.notifications.warn(`You have not enough ${talent.label} to cast ${item.name} at Rank ${fd.object.consumeSpellLevel}`);
 						}
 						resolve(fd.object);
 					},
