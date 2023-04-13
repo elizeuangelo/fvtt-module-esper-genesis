@@ -1,8 +1,8 @@
 # Foundry VTT - Esper Genesis Addon for 5e
 
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/elizeuangelo/fvtt-module-esper-genesis)
-![GitHub Releases](https://img.shields.io/github/downloads/elizeuangelo/fvtt-module-esper-genesis/latest/esper-genesis.zip)
-![GitHub All Releases](https://img.shields.io/github/downloads/elizeuangelo/fvtt-module-esper-genesis/esper-genesis.zip?label=downloads)
+![GitHub Releases](https://img.shields.io/github/downloads/elizeuangelo/fvtt-module-combat-music-master/latest/esper-genesis.zip)
+![GitHub All Releases](https://img.shields.io/github/downloads/elizeuangelo/fvtt-module-esper-genesis/esper-genesis.zip)
 
 An implementation of Esper Genesis basic rules on top of the [dnd5e system](https://github.com/foundryvtt/dnd5e) and [Tidy5e Sheet](https://github.com/sdenec/tidy5e-sheet).
 There are no classes or content, so you need to add them individually.
@@ -11,7 +11,7 @@ There are no classes or content, so you need to add them individually.
 
 -   [New Sheet Design](#new-sheet-design)
 -   [Talents vs Techniques](#talents-vs-techniques)
--   [New Skills +](#new-skills-)
+-   [System Updates +](#system-updates-)
 
 ### New Sheet Design
 
@@ -25,13 +25,14 @@ Talents use _Talent Points_ and Techniques uses _Power Rank Slots_. When using a
 
 ![power-use](./assets/3.PNG)
 
-### New Skills +
+### System Updates +
 
 Several updates to the 5e system:
 
 -   Updated skill list
 -   Disciplines
 -   Power Ranks
+-   Currency
 -   And more...
 
 ## License

@@ -169,12 +169,23 @@ function temporaryWorkaround(actor) {
 	}, 0);
 }
 
-Hooks.on('createActor', temporaryWorkaround);
+function prepareCurrency(actor) {
+	const currency = actor.system.currency;
+	for (const key of Object.keys(currency)) {
+		if (!(key in CONFIG.DND5E.currencies)) delete currency[key];
+	}
+	for (const key of Object.keys(CONFIG.DND5E.currencies)) {
+		if (!(key in currency)) currency[key] = 0;
+	}
+}
 
+Hooks.on('createActor', (sheet) => temporaryWorkaround(sheet.object));
 Hooks.on('ready', () => {
 	// Sets Currency Weight to 0
 	if (game.user.isGM && game.settings.get('dnd5e', 'currencyWeight')) {
 		ui.notifications.info('Setting currency weight to zero...');
 		game.settings.set('dnd5e', 'currencyWeight', false);
 	}
+	// Prepare Currency for All Actors
+	game.actors.contents.forEach(prepareCurrency);
 });
