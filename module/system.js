@@ -179,13 +179,11 @@ function prepareCurrency(actor) {
 	}
 }
 
-Hooks.on('createActor', (sheet) => temporaryWorkaround(sheet.object));
+Hooks.on('createActor', temporaryWorkaround);
 Hooks.on('ready', () => {
 	// Sets Currency Weight to 0
 	if (game.user.isGM && game.settings.get('dnd5e', 'currencyWeight')) {
 		ui.notifications.info('Setting currency weight to zero...');
 		game.settings.set('dnd5e', 'currencyWeight', false);
 	}
-	// Prepare Currency for All Actors
-	game.actors.contents.forEach(prepareCurrency);
 });
