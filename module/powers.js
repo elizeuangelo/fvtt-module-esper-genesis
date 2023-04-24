@@ -115,6 +115,7 @@ async function powerUseDialog(item) {
 						if (fd.object.consumeSpellSlot === false || canCast) {
 							item.use({
 								consumeTalentPoints: fd.object.consumeSpellSlot ? RANK_POWER_CONSUMPTION[fd.object.consumeSpellLevel] : 0,
+								consumeSpellLevel: fd.object.consumeSpellLevel,
 								needsConfiguration: false,
 							});
 						} else {
