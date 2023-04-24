@@ -1,7 +1,7 @@
 # Foundry VTT - Esper Genesis Addon for 5e
 
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/elizeuangelo/fvtt-module-esper-genesis)
-![GitHub Releases](https://img.shields.io/github/downloads/elizeuangelo/fvtt-module-combat-music-master/latest/esper-genesis.zip)
+![GitHub Releases](https://img.shields.io/github/downloads/elizeuangelo/fvtt-module-esper-genesis/latest/esper-genesis.zip)
 ![GitHub All Releases](https://img.shields.io/github/downloads/elizeuangelo/fvtt-module-esper-genesis/esper-genesis.zip)
 
 An implementation of Esper Genesis basic rules on top of the [dnd5e system](https://github.com/foundryvtt/dnd5e) and [Tidy5e Sheet](https://github.com/sdenec/tidy5e-sheet).
